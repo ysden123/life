@@ -17,9 +17,7 @@ object Main extends SimpleSwingApplication:
       LifeStatus.Dead
     }
 
-/*
     generateInitialGeneration(initialGeneration, stageWidth)
-*/
     /*
         initialGeneration(10)(10) = LifeStatus.Live
         initialGeneration(10)(11) = LifeStatus.Live
@@ -36,16 +34,23 @@ object Main extends SimpleSwingApplication:
 
     def tick(): Unit =
       val liveCount = life.updateGeneration()
-      println(s"liveCount=$liveCount")
       lifePanel.repaint()
       if liveCount == 0 then
         timer.stop()
 
     menuBar = new MenuBar {
       contents += new Menu("Generation") {
+        contents += new MenuItem(Action("Clear stage") {
+          life.clearStage()
+          lifePanel.repaint()
+        })
+        contents += new MenuItem(Action("Regenerate initial generation") {
+          life.regenerateInitialGeneration()
+          lifePanel.repaint()
+        })
+
         contents += new MenuItem(Action("Next generation") {
           val liveCount = life.updateGeneration()
-          println(s"liveCount=$liveCount")
           lifePanel.repaint()
         })
 
