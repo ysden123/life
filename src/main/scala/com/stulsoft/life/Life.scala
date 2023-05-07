@@ -18,10 +18,13 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
   archive += initialGeneration
   private var generationNumber = 0
   private var liveCount = countLiveCells()
+  private var reasonOfStop = ""
 
   def updateGeneration(): Int = {
+    reasonOfStop = ""
     generationNumber += 1
     if archive.size >= 10_000 then
+      reasonOfStop = "More than 10 000 generations"
       liveCount = 0
       0
     else
@@ -57,6 +60,7 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
       })
 
       if alreadyExists then
+        reasonOfStop = "A generation already existed"
         for (x <- 0 until stageWidth) {
           for (y <- 0 until stageWidth) {
             generation(x)(y) = LifeStatus.Dead
@@ -68,6 +72,8 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
 
       val totalLive = countLiveCells()
       liveCount = totalLive
+      if totalLive == 0 && reasonOfStop.isEmpty then
+        reasonOfStop = "No one live cell"
       totalLive
   }
 
@@ -138,7 +144,7 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
     generationNumber = 0
 
   def buildStatusLineText(): String =
-    s"Generation: $generationNumber, number of live cells: $liveCount"
+    s"Generation: $generationNumber, number of live cells: $liveCount. $reasonOfStop"
 
   private def countLiveCells(): Int =
     (for {
