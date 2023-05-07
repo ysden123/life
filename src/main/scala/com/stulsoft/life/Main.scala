@@ -12,7 +12,12 @@ import scala.util.Random
 
 object Main extends SimpleSwingApplication:
   override def top: Frame = new MainFrame {
-    title = "Life, automata"
+    val version: String = ManifestInfo("com.stulsoft", "life").version() match
+      case Some(version) =>
+        version
+      case None =>
+        ""
+    title = "Life, automata " + version
     this.resizable = false
     val cellWidth = 10
     val stageWidth: Int = 600 / cellWidth
