@@ -5,7 +5,7 @@
 package com.stulsoft.life
 
 import java.awt.Color
-import scala.swing.event.{MouseClicked, MouseEvent}
+import scala.swing.event.{MouseClicked, MouseEvent, MousePressed}
 import scala.swing.{Graphics2D, Panel}
 
 class LifePanel(life: Life) extends Panel {
@@ -26,10 +26,11 @@ class LifePanel(life: Life) extends Panel {
 
   listenTo(mouse.clicks)
   reactions += {
-    case MouseClicked(_,p, _,_,_) =>
+    case MousePressed(_, p, _, _, _) =>
       val x = p.x / life.cellWidth
       val y = p.y / life.cellWidth
-      life.updateStatus(x,y)
+      life.updateStatus(x, y)
       repaint()
+      requestFocus()
   }
 }

@@ -16,9 +16,13 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
   private var generation = initialGeneration.clone()
   private val archive: ArrayBuffer[Array[Array[LifeStatus]]] = ArrayBuffer.empty[Array[Array[LifeStatus]]]
   archive += initialGeneration
+  private var generationNumber = 0
+  private var liveCount = countLiveCells()
 
   def updateGeneration(): Int = {
+    generationNumber += 1
     if archive.size >= 10_000 then
+      liveCount = 0
       0
     else
       val nextGeneration = Array.ofDim[LifeStatus](stageWidth, stageWidth)
@@ -62,13 +66,8 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
         generation = nextGeneration.clone()
         archive += generation
 
-      var totalLive = 0
-      for (x <- 0 until stageWidth) {
-        for (y <- 0 until stageWidth) {
-          //        generation(x)(y) = nextGeneration(x)(y)
-          if generation(x)(y) == LifeStatus.Live then totalLive += 1
-        }
-      }
+      val totalLive = countLiveCells()
+      liveCount = totalLive
       totalLive
   }
 
@@ -112,21 +111,38 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
     }
 
   def regenerateInitialGeneration(): Unit =
+    generationNumber = 0
     val random = Random
     archive.clear()
 
     for (_ <- 1 to 200) {
       val x = random.nextInt(stageWidth)
       val y = random.nextInt(stageWidth)
-      generation(x)(y) = if random.nextBoolean() then LifeStatus.Live else LifeStatus.Dead
+      generation(x)(y) = if random.nextBoolean() then
+        LifeStatus.Live
+      else
+        LifeStatus.Dead
     }
 
-  def clearStage():Unit=
+    liveCount = countLiveCells()
+
+  def clearStage(): Unit =
     archive.clear()
 
     for (x <- 0 until stageWidth) {
-      for(y <- 0 until stageWidth){
+      for (y <- 0 until stageWidth) {
         generation(x)(y) = LifeStatus.Dead
       }
     }
+    liveCount = 0
+    generationNumber = 0
+
+  def buildStatusLineText(): String =
+    s"Generation: $generationNumber, number of live cells: $liveCount"
+
+  private def countLiveCells(): Int =
+    (for {
+      x <- 0 until stageWidth
+      y <- 0 until stageWidth if generation(x)(y) == LifeStatus.Live
+    } yield 1).size
 }
