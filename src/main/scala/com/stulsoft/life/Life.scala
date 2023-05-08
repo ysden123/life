@@ -117,7 +117,6 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
     }
 
   def regenerateInitialGeneration(): Unit =
-    generationNumber = 0
     val random = Random
     archive.clear()
 
@@ -131,6 +130,8 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
     }
 
     liveCount = countLiveCells()
+    generationNumber = 0
+    reasonOfStop = ""
 
   def clearStage(): Unit =
     archive.clear()
@@ -142,6 +143,7 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
     }
     liveCount = 0
     generationNumber = 0
+    reasonOfStop = ""
 
   def buildStatusLineText(): String =
     s"Generation: $generationNumber, number of live cells: $liveCount. $reasonOfStop"
