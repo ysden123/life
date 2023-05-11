@@ -12,6 +12,7 @@ import scala.util.Random
 
 object Main extends SimpleSwingApplication:
   override def top: Frame = new MainFrame {
+    val theMainFrame: MainFrame = this
     val version: String = ManifestInfo("com.stulsoft", "life").version() match
       case Some(version) =>
         version
@@ -43,7 +44,7 @@ object Main extends SimpleSwingApplication:
       layout(lifePanel) = Position.Center
     }
 
-    val timer: GenerationTimer = GenerationTimer(500, tick)
+    val timer: GenerationTimer = GenerationTimer(Config.getInterval, tick)
 
     def tick(): Unit =
       val liveCount = life.updateGeneration()
@@ -53,6 +54,11 @@ object Main extends SimpleSwingApplication:
         timer.stop()
 
     menuBar = new MenuBar {
+      contents += new Menu("Configuration"){
+        contents += new MenuItem(Action("Change configuration"){
+          ConfigDialog.showDialog(theMainFrame)
+        })
+      }
       contents += new Menu("Generation") {
         contents += new MenuItem(Action("Clear stage") {
           life.clearStage()
