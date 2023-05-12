@@ -44,7 +44,7 @@ object Main extends SimpleSwingApplication:
       layout(lifePanel) = Position.Center
     }
 
-    val timer: GenerationTimer = GenerationTimer(Config.getInterval, tick)
+    var timer: GenerationTimer = _
 
     def tick(): Unit =
       val liveCount = life.updateGeneration()
@@ -78,11 +78,13 @@ object Main extends SimpleSwingApplication:
         })
 
         contents += MenuItem(Action("Start") {
+          timer = GenerationTimer(Config.getInterval, tick)
           timer.start()
         })
 
         contents += MenuItem(Action("Stop") {
-          timer.stop()
+          if timer != null then
+            timer.stop()
         })
       }
     }
