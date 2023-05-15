@@ -21,6 +21,7 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
   private var reasonOfStop = ""
 
   def updateGeneration(): Int = {
+    if archive.isEmpty then archive += generation
     reasonOfStop = ""
     generationNumber += 1
     if archive.size >= 10_000 then
@@ -128,6 +129,33 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
       else
         LifeStatus.Dead
     }
+
+    liveCount = countLiveCells()
+    generationNumber = 0
+    reasonOfStop = ""
+
+  def saveInitialGeneration(): Unit =
+    SaveGeneration.save(this, "test.txt", archive(0))
+
+  def loadInitialGeneration(): Unit =
+    archive.clear()
+    val initialGenerationLoaded = SaveGeneration.load(this, "test.txt")
+    archive += generation
+    for (x <- 0 until stageWidth) {
+      for (y <- 0 until stageWidth)
+        initialGeneration(x)(y) = initialGenerationLoaded(x)(y)
+        generation(x)(y) = initialGenerationLoaded(x)(y)
+    }
+
+    liveCount = countLiveCells()
+    generationNumber = 0
+    reasonOfStop = ""
+
+  def reloadInitialGeneration(): Unit =
+    if archive.nonEmpty then
+      generation = archive(0).clone
+    archive.clear()
+    archive += generation
 
     liveCount = countLiveCells()
     generationNumber = 0

@@ -54,8 +54,8 @@ object Main extends SimpleSwingApplication:
         timer.stop()
 
     menuBar = new MenuBar {
-      contents += new Menu("Configuration"){
-        contents += new MenuItem(Action("Change configuration"){
+      contents += new Menu("Configuration") {
+        contents += new MenuItem(Action("Change configuration") {
           ConfigDialog.showDialog(theMainFrame)
         })
       }
@@ -85,6 +85,22 @@ object Main extends SimpleSwingApplication:
         contents += MenuItem(Action("Stop") {
           if timer != null then
             timer.stop()
+        })
+
+        contents += MenuItem(Action("Reload initial generation") {
+          life.reloadInitialGeneration()
+          lifePanel.repaint()
+          updateStatusLine(statusLine, life)
+        })
+
+        contents += MenuItem(Action("Save initial generation") {
+          life.saveInitialGeneration()
+        })
+
+        contents += MenuItem(Action("Load initial generation") {
+          life.loadInitialGeneration()
+          lifePanel.repaint()
+          updateStatusLine(statusLine, life)
         })
       }
     }
