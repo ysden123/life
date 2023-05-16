@@ -135,21 +135,23 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
     reasonOfStop = ""
 
   def saveInitialGeneration(): Unit =
-    SaveGeneration.save(this, "test.txt", archive(0))
+    SaveGeneration.save(this, archive(0))
 
   def loadInitialGeneration(): Unit =
-    archive.clear()
-    val initialGenerationLoaded = SaveGeneration.load(this, "test.txt")
-    archive += generation
-    for (x <- 0 until stageWidth) {
-      for (y <- 0 until stageWidth)
-        initialGeneration(x)(y) = initialGenerationLoaded(x)(y)
-        generation(x)(y) = initialGenerationLoaded(x)(y)
-    }
+    SaveGeneration.load(this) match
+      case Some(initialGenerationLoaded) =>
+        archive.clear()
+        archive += generation
+        for (x <- 0 until stageWidth) {
+          for (y <- 0 until stageWidth)
+            initialGeneration(x)(y) = initialGenerationLoaded(x)(y)
+            generation(x)(y) = initialGenerationLoaded(x)(y)
+        }
 
-    liveCount = countLiveCells()
-    generationNumber = 0
-    reasonOfStop = ""
+        liveCount = countLiveCells()
+        generationNumber = 0
+        reasonOfStop = ""
+      case None =>
 
   def reloadInitialGeneration(): Unit =
     if archive.nonEmpty then
