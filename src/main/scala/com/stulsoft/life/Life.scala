@@ -19,6 +19,8 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
   private var generationNumber = 0
   private var liveCount = countLiveCells()
   private var reasonOfStop = ""
+  private var x1: Int = 0
+  private var y1: Int = 0
 
   def updateGeneration(): Int = {
     if archive.isEmpty then archive += generation
@@ -80,6 +82,8 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
 
   def updateStatus(x: Int, y: Int): Unit =
     generation(x)(y) = if defineLifeStatus(x, y) == LifeStatus.Live then LifeStatus.Dead else LifeStatus.Live
+    x1 = x
+    y1 = y
 
   def defineLifeStatus(x: Int, y: Int): LifeStatus =
     var xx = x
@@ -120,6 +124,8 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
   def regenerateInitialGeneration(): Unit =
     val random = Random
     archive.clear()
+    x1 = 0
+    y1 = 0
 
     for (_ <- 1 to 200) {
       val x = random.nextInt(stageWidth)
@@ -151,6 +157,8 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
         liveCount = countLiveCells()
         generationNumber = 0
         reasonOfStop = ""
+        x1 = 0
+        y1 = 0
       case None =>
 
   def reloadInitialGeneration(): Unit =
@@ -162,8 +170,12 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
     liveCount = countLiveCells()
     generationNumber = 0
     reasonOfStop = ""
+    x1 = 0
+    y1 = 0
 
   def clearStage(): Unit =
+    x1 = 0
+    y1 = 0
     archive.clear()
 
     for (x <- 0 until stageWidth) {
@@ -177,6 +189,13 @@ class Life(val stageWidth: Int, val cellWidth: Int, val initialGeneration: Array
 
   def buildStatusLineText(): String =
     s"Generation: $generationNumber, number of live cells: $liveCount. $reasonOfStop"
+
+  def drawLine(x2: Int, y2: Int): Unit =
+    val lp = LineParams(x1, y1, x2, y2)
+    val points = lp.points()
+    for (i <- points.indices) {
+      updateStatus(points(i)._1, points(i)._2)
+    }
 
   private def countLiveCells(): Int =
     (for {

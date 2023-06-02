@@ -24,12 +24,16 @@ class LifePanel(life: Life) extends Panel {
     }
   }
 
-  listenTo(mouse.clicks)
+  listenTo(mouse.clicks, mouse.moves, keys)
   reactions += {
-    case MousePressed(_, p, _, _, _) =>
-      val x = p.x / life.cellWidth
-      val y = p.y / life.cellWidth
-      life.updateStatus(x, y)
+    //    case MousePressed(_, p, _, _, _)(peer) =>
+    case e: MousePressed =>
+      val x = e.point.x / life.cellWidth
+      val y = e.point.y / life.cellWidth
+      if e.peer.isShiftDown then
+        life.drawLine(x, y)
+      else
+        life.updateStatus(x, y)
       repaint()
       requestFocus()
   }

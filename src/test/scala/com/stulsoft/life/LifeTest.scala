@@ -156,3 +156,12 @@ class LifeTest extends AnyFlatSpec:
     if l.updateGeneration() > 0 then
       fail("Must be only 1 generation after initial")
   }
+
+  it should "support line drawing" in {
+    val ig = Array.ofDim[LifeStatus](6, 6)
+    val life=Life(6, 1, ig)
+    life.clearStage()
+    life.drawLine(5,1)
+    life.clearStage()
+    life.drawLine(4,3)
+  }
