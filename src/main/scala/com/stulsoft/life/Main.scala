@@ -4,7 +4,7 @@
 
 package com.stulsoft.life
 
-import com.sun.java.swing.ui.StatusBar
+import com.stulsoft.common.ManifestInfo
 
 import scala.swing.BorderPanel.Position
 import scala.swing.{Action, BorderPanel, Dimension, Frame, Label, MainFrame, Menu, MenuBar, MenuItem, SimpleSwingApplication}
@@ -12,13 +12,18 @@ import scala.util.Random
 
 object Main extends SimpleSwingApplication:
   override def top: Frame = new MainFrame {
-    val theMainFrame: MainFrame = this
-    val version: String = ManifestInfo("com.stulsoft", "life").version() match
+    private val theMainFrame: MainFrame = this
+    private val manifestInfo = ManifestInfo("com.stulsoft", "life")
+    private val version = manifestInfo.version() match
       case Some(version) =>
         version
       case None =>
         ""
-    title = "Life, automata " + version
+    private val buildDate = manifestInfo.buildDate() match
+      case Some(theBuildDate) => theBuildDate
+      case None => ""
+    title = "Life, automata " + version + " " + buildDate
+
     this.resizable = false
     val cellWidth = 10
     val stageWidth: Int = 600 / cellWidth

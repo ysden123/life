@@ -1,15 +1,18 @@
+import sbt.Keys.libraryDependencies
+
 import java.util.Calendar
 
 ThisBuild / scalaVersion := "3.3.0"
-ThisBuild / version := "2.0.0"
+ThisBuild / version := "2.0.1"
 ThisBuild / organization := "com.stulsoft"
 ThisBuild / organizationName := "stulsoft"
 
 lazy val root = (project in file("."))
   .settings(
     name := "life",
+    libraryDependencies += "com.stulsoft" %% "common" % "latest.integration",
     libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-    libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.4.6",
+    libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.4.7",
     libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
 
     libraryDependencies += "org.scalatest" %% "scalatest-flatspec" % "3.2.15" % Test
