@@ -13,16 +13,7 @@ import scala.util.Random
 object Main extends SimpleSwingApplication:
   override def top: Frame = new MainFrame {
     private val theMainFrame: MainFrame = this
-    private val manifestInfo = ManifestInfo("com.stulsoft", "life")
-    private val version = manifestInfo.version() match
-      case Some(version) =>
-        version
-      case None =>
-        ""
-    private val buildDate = manifestInfo.buildDate() match
-      case Some(theBuildDate) => theBuildDate
-      case None => ""
-    title = "Life, automata " + version + " " + buildDate
+    title = ManifestInfo("com.stulsoft", "life").buildTitle("Life, automata")
 
     this.resizable = false
     val cellWidth = 10
@@ -32,13 +23,6 @@ object Main extends SimpleSwingApplication:
     }
 
     generateInitialGeneration(initialGeneration, stageWidth)
-    /*
-        initialGeneration(10)(10) = LifeStatus.Live
-        initialGeneration(10)(11) = LifeStatus.Live
-        initialGeneration(11)(10) = LifeStatus.Live
-        initialGeneration(30)(10) = LifeStatus.Live
-        initialGeneration(10)(30) = LifeStatus.Live
-    */
 
     val statusLine = new Label(" ")
     val life: Life = Life(stageWidth, cellWidth, initialGeneration)
