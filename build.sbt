@@ -2,8 +2,8 @@ import sbt.Keys.libraryDependencies
 
 import java.util.Calendar
 
-ThisBuild / scalaVersion := "3.3.0"
-ThisBuild / version := "2.0.2"
+ThisBuild / scalaVersion := "3.3.1"
+ThisBuild / version := "2.1.0"
 ThisBuild / organization := "com.stulsoft"
 ThisBuild / organizationName := "stulsoft"
 

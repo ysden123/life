@@ -4,10 +4,10 @@
 
 package com.stulsoft.life
 
+import com.stulsoft.common.AppDataPath
 import com.typesafe.scalalogging.StrictLogging
 
-import java.io.{File, FileReader, FileWriter, PrintWriter}
-import java.nio.file.Paths
+import java.io.{File, PrintWriter}
 import scala.io.Source
 import scala.swing.FileChooser
 import scala.swing.FileChooser.Result.Approve
@@ -47,6 +47,7 @@ object SaveGeneration extends StrictLogging:
       Option(initialGeneration)
     else
       Option.empty
-  private def buildFileChooser():FileChooser =
-    val startDir = Paths.get(".").toAbsolutePath.getFileName.toFile
+
+  private def buildFileChooser(): FileChooser =
+    val startDir = new File(AppDataPath.appDataPath("life"))
     new FileChooser(startDir)
