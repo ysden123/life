@@ -4,6 +4,8 @@
 
 package com.stulsoft.life
 
+import com.stulsoft.common.AppDataPath
+
 import java.io.{File, FileReader, FileWriter}
 import java.util.Properties
 
@@ -15,10 +17,13 @@ object Config:
 
   load()
 
+  private def appPropFile:File=
+    new File(AppDataPath.appDataPath("life") + "\\" + fileName)
+
   private def load(): Unit =
     val properties = new Properties()
     try
-      properties.load(new FileReader(new File(fileName)))
+      properties.load(new FileReader(appPropFile))
       interval = properties.getProperty(intervalName, defaultInterval).toInt
     catch
       case _: Exception =>
@@ -33,7 +38,7 @@ object Config:
     val properties = new Properties()
     properties.put(intervalName, interval.toString)
     try
-      properties.store(new FileWriter(new File(fileName)), "")
+      properties.store(new FileWriter(appPropFile), "")
     catch
       case exception: Exception =>
         println(s"Can't save properties: ${exception.getMessage}")
